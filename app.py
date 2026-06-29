@@ -137,15 +137,54 @@ if app_mode == "📊 Dashboard & Tax Engine":
     st.markdown("---")
     
     # ROW 3: Separate Financial Ledgers
-    tab1, tab2 = st.tabs(["📂 Sales & Invoices Ledger", "🧾 Operational Expenses & Receipts"])
+    tab1, tab2, tab3 = st.tabs(["📂 Sales & Invoices Ledger", "🧾 Operational Expenses & Receipts", "🤖 AI Financial Analysis"])
+
+with tab1:
+    st.dataframe(inv_df.style.format({'Amount': 'Rp {:,.0f}', 'Tax_Collected': 'Rp {:,.0f}', 'Tax_Rate_%': '{:.0f}%'}), use_container_width=True)
     
-    with tab1:
-        st.dataframe(inv_df.style.format({'Amount': 'Rp.{:,.2f}', 'Tax_Collected': 'Rp.{:,.2f}', 'Tax_Rate_%': '{:.0f}%'}), use_container_width=True)
+with tab2:
+    st.dataframe(exp_df.style.map(highlight_missing_receipt, subset=['Receipt']).format({'Amount': 'Rp {:,.0f}', 'Tax_Paid': 'Rp {:,.0f}'}), use_container_width=True)
+
+# --- INI KODE BARU UNTUK TAB ASISTEN AI ---
+with tab3:
+    st.subheader("🤖 Analisis Otomatis AI: Laporan Keuangan Januari - Juni")
+    
+    # 1. Hitung total pendapatan bersih & pengeluaran bersih
+    total_pendapatan_bersih = inv_df['Amount'].sum()
+    total_pengeluaran_bersih = exp_df['Amount'].sum()
+    sisa_kas = total_pendapatan_bersih - total_pengeluaran_bersih
+    rasio_pengeluaran = (total_pengeluaran_bersih / total_pendapatan_bersih * 100) if total_pendapatan_bersih > 0 else 0
+    
+    # 2. Logika AI untuk menghasilkan Insight / Analisis Otomatis
+    st.markdown("### 📋 Ringkasan Eksekutif AI")
+    
+    col_ai1, col_ai2 = st.columns(2)
+    with col_ai1:
+        st.info(f"**Total Pendapatan Terlog:** Rp {total_pendapatan_bersih:,.0f}".replace(",", "."))
+        st.warning(f"**Total Pengeluaran Terlog:** Rp {total_pengeluaran_bersih:,.0f}".replace(",", "."))
+    
+    with col_ai2:
+        st.success(f"**Arus Kas Bersih (Net Cashflow):** Rp {sisa_kas:,.0f}".replace(",", "."))
+        st.metric("Rasio Beban Operasional", f"{rasio_pengeluaran:.1f}%")
+
+    st.markdown("### 💡 Rekomendasi & Analisis Strategis AI")
+    
+    # Generate teks rekomendasi dinamis berdasarkan angka keuangan Anda
+    insights = []
+    
+    if rasio_pengeluaran > 50:
+        insights.append("⚠️ **Peringatan Efisiensi:** Rasio pengeluaran Anda melebihi 50% dari total pendapatan. AI mendeteksi adanya pembengkakan pada biaya operasional. Disarankan untuk meninjau kembali vendor pengeluaran pada tab operasional.")
+    else:
+        insights.append("✅ **Kesehatan Keuangan Baik:** Rasio pengeluaran Anda berada di bawah batas aman (50%). Manajemen biaya operasional dari Januari hingga Juni berjalan sangat efisien.")
         
-    with tab2:
-        # Highlight lines missing receipts in soft red for tax audit safety
-        def highlight_missing_receipt(val):
-            color = '#ffcccc' if val == 'Missing' else 'clear'
-            return f'background-color: {color}'
-            
-        st.dataframe(exp_df.style.map(highlight_missing_receipt, subset=['Receipt']).format({'Amount': '${:,.2f}', 'Tax_Paid': '${:,.2f}'}), use_container_width=True)
+    if total_pending_tax > 0:
+        insights.append(f"⏳ **Optimasi Piutang:** Terdapat potensi pajak dan dana terikat pada invoice *Unpaid* sebesar **Rp {total_pending_tax:,.0f}**. AI menyarankan untuk segera mengirimkan pengingat invoice otomatis kepada klien yang masuk dalam daftar umur piutang > 30 hari guna mengamankan likuiditas sebelum akhir tahun pajak.").replace(",", ".")
+        
+    if total_tax_offsets > 0:
+        insights.append(f"🛡️ **Manfaat Pajak Terdeteksi:** Anda berhasil mengklaim Tax Offset sebesar **Rp {total_tax_offsets:,.0f}** dari pengeluaran operasional Anda. Ini membantu menekan total kewajiban pajak bersih Anda secara legal.").replace(",", ".")
+        
+    # Tampilkan rekomendasi di dalam box premium
+    for insight in insights:
+        st.write(insight)
+        
+    st.caption("*Analisis ini dibuat secara otomatis oleh sistem AI FinAnlytica berdasarkan tren data transaksi Januari - Juni 2026.*")
