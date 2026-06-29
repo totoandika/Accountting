@@ -65,7 +65,7 @@ if app_mode == "➕ Add New Invoice":
     st.sidebar.subheader("New Sales Invoice")
     with st.sidebar.form("inv_form", clear_on_submit=True):
         client = st.text_input("Client Name")
-        amount = st.number_input("Net Amount (Rp.)", min_value=0.0, step=100.0)
+        amount = st.number_input("Net Amount (Rp)", min_value=0.0, step=100.0)
         tax_rate = st.slider("Tax Rate (%)", 0, 20, 10)
         due_d = st.date_input("Due Date", value=today)
         status = st.selectbox("Status", ["Unpaid", "Paid"])
