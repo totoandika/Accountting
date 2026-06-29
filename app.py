@@ -109,19 +109,19 @@ st.title(txt[lang]["title"])
 # --- 2. DATABASE DUMMY INVOICE ---
 if 'invoices' not in st.session_state:
     st.session_state.invoices = pd.DataFrame([
-        {"Invoice_ID": "INV-001", "Client": "Alpha Corp", "Due_Date": "2026-05-31", "Amount": 0.0, "Tax_Rate_%": 10, "Status": "Paid"},
-        {"Invoice_ID": "INV-002", "Client": "Beta LLC", "Due_Date": "2026-07-01", "Amount": 0.0, "Tax_Rate_%": 10, "Status": "Unpaid"},
-        {"Invoice_ID": "INV-003", "Client": "Gamma Inc", "Due_Date": "2026-05-15", "Amount": 0.0, "Tax_Rate_%": 5, "Status": "Unpaid"},
-        {"Invoice_ID": "INV-004", "Client": "Delta Co", "Due_Date": "2026-03-10", "Amount": 0.0, "Tax_Rate_%": 10, "Status": "Unpaid"},
+        {"Invoice_ID": "INV-001", "Client": "Alpha Corp", "Due_Date": "2026-05-31", "Amount": 50000000.0, "Tax_Rate_%": 10, "Status": "Paid"},
+        {"Invoice_ID": "INV-002", "Client": "Beta LLC", "Due_Date": "2026-07-01", "Amount": 35000000.0, "Tax_Rate_%": 10, "Status": "Unpaid"},
+        {"Invoice_ID": "INV-003", "Client": "Gamma Inc", "Due_Date": "2026-05-15", "Amount": 12000000.0, "Tax_Rate_%": 5, "Status": "Unpaid"},
+        {"Invoice_ID": "INV-004", "Client": "Delta Co", "Due_Date": "2026-03-10", "Amount": 25000000.0, "Tax_Rate_%": 10, "Status": "Unpaid"},
     ])
     st.session_state.invoices['Due_Date'] = pd.to_datetime(st.session_state.invoices['Due_Date'])
 
 # --- 3. DATABASE DUMMY EXPENSE ---
 if 'expenses' not in st.session_state:
     st.session_state.expenses = pd.DataFrame([
-        {"Expense_ID": "EXP-001", "Vendor": "AWS Cloud", "Category": "Software/Tech", "Date": "2026-06-01", "Amount": 0.0, "Tax_Paid": 0.0, "Receipt": "Uploaded"},
-        {"Expense_ID": "EXP-002", "Vendor": "WeWork", "Category": "Rent/Office", "Date": "2026-06-05", "Amount": 0.0, "Tax_Paid": 0.0, "Receipt": "Uploaded"},
-        {"Expense_ID": "EXP-003", "Vendor": "Google Ads", "Category": "Marketing", "Date": "2026-06-15", "Amount": 0.0, "Tax_Paid": 0.0, "Receipt": "Missing"},
+        {"Expense_ID": "EXP-001", "Vendor": "AWS Cloud", "Category": "Software/Tech", "Date": "2026-06-01", "Amount": 4000000.0, "Tax_Paid": 400000.0, "Receipt": "Uploaded"},
+        {"Expense_ID": "EXP-002", "Vendor": "WeWork", "Category": "Rent/Office", "Date": "2026-06-05", "Amount": 15000000.0, "Tax_Paid": 1500000.0, "Receipt": "Uploaded"},
+        {"Expense_ID": "EXP-003", "Vendor": "Google Ads", "Category": "Marketing", "Date": "2026-06-15", "Amount": 6000000.0, "Tax_Paid": 0.0, "Receipt": "Missing"},
     ])
     st.session_state.expenses['Date'] = pd.to_datetime(st.session_state.expenses['Date'])
 
@@ -175,7 +175,8 @@ elif app_mode == txt[lang]["menu_exp"]:
     st.sidebar.subheader(txt[lang]["form_exp_title"])
     with st.sidebar.form("exp_form", clear_on_submit=True):
         vendor = st.text_input(txt[lang]["form_vendor"])
-        category = st.selectbox(txt[lang]["form_cat"], ["Software/Tech", "Rent/Office", "Marketing", "Travel & Meals", "Legal/Admin"])
+        # 🟢 Kategori "Repairs & Maintenance" sudah disematkan di baris bawah ini:
+        category = st.selectbox(txt[lang]["form_cat"], ["Software/Tech", "Rent/Office", "Marketing", "Travel & Meals", "Legal/Admin", "Repairs & Maintenance"])
         exp_amount = st.number_input(txt[lang]["form_exp_amount"], min_value=0.0, step=500000.0)
         tax_paid = st.number_input(txt[lang]["form_tax_paid"], min_value=0.0, step=50000.0)
         uploaded_file = st.file_uploader(txt[lang]["form_file"], type=["pdf", "png", "jpg"])
