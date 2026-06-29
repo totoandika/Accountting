@@ -12,14 +12,20 @@ today = pd.to_datetime('2026-06-29')
 # --- 1. SIMULATED INVOICE DATABASE ---
 if 'invoices' not in st.session_state:
     st.session_state.invoices = pd.DataFrame([
-       
+       {'Invoice_ID': 'INV-001', 'Client': 'Alpha Corp', 'Due_Date': '2026-05-31', 'Amount': 5000.00, 'Tax_Rate_%': 10, 'Status': 'Paid'},
+        {'Invoice_ID': 'INV-002', 'Client': 'Beta LLC', 'Due_Date': '2026-07-01', 'Amount': 3500.00, 'Tax_Rate_%': 10, 'Status': 'Unpaid'},
+        {'Invoice_ID': 'INV-003', 'Client': 'Gamma Inc', 'Due_Date': '2026-05-15', 'Amount': 1200.00, 'Tax_Rate_%': 5, 'Status': 'Unpaid'},
+        {'Invoice_ID': 'INV-004', 'Client': 'Delta Co', 'Due_Date': '2026-03-10', 'Amount': 2500.00, 'Tax_Rate_%': 10, 'Status': 'Unpaid'},
+    ])
     ])
     st.session_state.invoices['Due_Date'] = pd.to_datetime(st.session_state.invoices['Due_Date'])
 
 # --- 2. SIMULATED EXPENSE DATABASE ---
 if 'expenses' not in st.session_state:
     st.session_state.expenses = pd.DataFrame([
-       
+       {'Expense_ID': 'EXP-001', 'Vendor': 'AWS Cloud', 'Category': 'Software/Tech', 'Date': '2026-06-01', 'Amount': 400.00, 'Tax_Paid': 40.00, 'Receipt': 'Uploaded'},
+        {'Expense_ID': 'EXP-002', 'Vendor': 'WeWork', 'Category': 'Rent/Office', 'Date': '2026-06-05', 'Amount': 1500.00, 'Tax_Paid': 150.00, 'Receipt': 'Uploaded'},
+        {'Expense_ID': 'EXP-003', 'Vendor': 'Google Ads', 'Category': 'Marketing', 'Date': '2026-06-15', 'Amount': 600.00, 'Tax_Paid': 0.00, 'Receipt': 'Missing'},
     ])
     st.session_state.expenses['Date'] = pd.to_datetime(st.session_state.expenses['Date'])
 
