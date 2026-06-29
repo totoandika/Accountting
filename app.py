@@ -22,9 +22,20 @@ if 'invoices' not in st.session_state:
 # --- 2. SIMULATED EXPENSE DATABASE ---
 if 'expenses' not in st.session_state:
     st.session_state.expenses = pd.DataFrame([
-        {'Expense_ID': 'EXP-001', 'Vendor': 'AWS Cloud', 'Category': 'Software/Tech', 'Date': '2026-06-01', 'Amount': 0.00, 'Tax_Paid': 0.00, 'Receipt': 'Uploaded'},
-        {'Expense_ID': 'EXP-002', 'Vendor': 'WeWork', 'Category': 'Rent/Office', 'Date': '2026-06-05', 'Amount': 0.00, 'Tax_Paid': 0.00, 'Receipt': 'Uploaded'},
-        {'Expense_ID': 'EXP-003', 'Vendor': 'Google Ads', 'Category': 'Marketing', 'Date': '2026-06-15', 'Amount': 0.00, 'Tax_Paid': 0.00, 'Receipt': 'Missing'},
+        {'Expense_ID': 'EXP-001', 'Vendor': 'AWS Cloud', 'Category': 'Software/Tech', 'Date': '2026-06-01', 'Amount': 400.00, 'Tax_Paid': 40.00, 'Receipt': 'Uploaded'},
+        {'Expense_ID': 'EXP-002', 'Vendor': 'WeWork', 'Category': 'Rent/Office', 'Date': '2026-06-05', 'Amount': 1500.00, 'Tax_Paid': 150.00, 'Receipt': 'Uploaded'},
+        {'Expense_ID': 'EXP-003', 'Vendor': 'Google Ads', 'Category': 'Marketing', 'Date': '2026-06-15', 'Amount': 600.00, 'Tax_Paid': 0.00, 'Receipt': 'Missing'},
+    ])
+    st.session_state.expenses['Date'] = pd.to_datetime(st.session_state.expenses['Date'])
+
+# 🟢 PASANG KODE BARU INI DI SINI:
+def highlight_missing_receipt(val):
+    color = '#ffcccc' if val == 'Missing' else ''
+    return f'background-color: {color}'
+
+# ... kode kelanjutan di bawahnya (Copy dataframes for current session...)
+inv_df = st.session_state.invoices.copy()
+exp_df = st.session_state.expenses.copy()
     ])
     st.session_state.expenses['Date'] = pd.to_datetime(st.session_state.expenses['Date'])
 
@@ -177,9 +188,8 @@ with tab3:
     else:
         insights.append("✅ **Kesehatan Keuangan Baik:** Rasio pengeluaran Anda berada di bawah batas aman (50%). Manajemen biaya operasional dari Januari hingga Juni berjalan sangat efisien.")
         
-    if total_pending_tax > 0:
-        insights.append(f"⏳ **Optimasi Piutang:** Terdapat potensi pajak dan dana terikat pada invoice *Unpaid* sebesar **Rp {total_pending_tax:,.0f}**. AI menyarankan untuk segera mengirimkan pengingat invoice otomatis kepada klien yang masuk dalam daftar umur piutang > 30 hari guna mengamankan likuiditas sebelum akhir tahun pajak.").replace(",", ".")
-        
+   if total_pending_tax > 0:
+    insights.append(f"⏳ **Optimasi Piutang:** Terdapat potensi pajak dan dana terikat pada invoice *Unpaid* sebesar **Rp {total_pending_tax:,.0f}**. AI menyarankan untuk segera mengirimkan pengingat invoice otomatis kepada klien yang masuk dalam daftar umur piutang > 30 hari guna mengamankan likuiditas sebelum akhir tahun pajak.".replace(",", "."))
     if total_tax_offsets > 0:
         insights.append(f"🛡️ **Manfaat Pajak Terdeteksi:** Anda berhasil mengklaim Tax Offset sebesar **Rp {total_tax_offsets:,.0f}** dari pengeluaran operasional Anda. Ini membantu menekan total kewajiban pajak bersih Anda secara legal.").replace(",", ".")
         
