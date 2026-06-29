@@ -148,4 +148,4 @@ if app_mode == "📊 Dashboard & Tax Engine":
             color = '#ffcccc' if val == 'Missing' else 'clear'
             return f'background-color: {color}'
             
-        st.dataframe(exp_df.style.applymap(highlight_missing_receipt, subset=['Receipt']).format({'Amount': '${:,.2f}', 'Tax_Paid': '${:,.2f}'}), use_container_width=True)
+        st.dataframe(exp_df.style.map(highlight_missing_receipt, subset=['Receipt']).format({'Amount': '${:,.2f}', 'Tax_Paid': '${:,.2f}'}), use_container_width=True)
