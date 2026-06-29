@@ -65,7 +65,7 @@ if app_mode == "➕ Add New Invoice":
     st.sidebar.subheader("New Sales Invoice")
     with st.sidebar.form("inv_form", clear_on_submit=True):
         client = st.text_input("Client Name")
-        amount = st.number_input("Net Amount (Rp)", min_value=0.0, step=100.0)
+        amount = st.number_input("Net Amount (Rp.)", min_value=0.0, step=100.0)
         tax_rate = st.slider("Tax Rate (%)", 0, 20, 10)
         due_d = st.date_input("Due Date", value=today)
         status = st.selectbox("Status", ["Unpaid", "Paid"])
@@ -80,8 +80,8 @@ elif app_mode == "🧾 Add New Expense/Receipt":
     with st.sidebar.form("exp_form", clear_on_submit=True):
         vendor = st.text_input("Vendor / Supplier")
         category = st.selectbox("Expense Category", ["Software/Tech", "Rent/Office", "Marketing", "Travel & Meals", "Legal/Admin"])
-        exp_amount = st.number_input("Expense Base Amount ($)", min_value=0.0, step=10.0)
-        tax_paid = st.number_input("Tax Paid on Purchase ($)", min_value=0.0, step=5.0)
+        exp_amount = st.number_input("Expense Base Amount (Rp.)", min_value=0.0, step=10.0)
+        tax_paid = st.number_input("Tax Paid on Purchase (Rp.)", min_value=0.0, step=5.0)
         uploaded_file = st.file_uploader("Attach Receipt (PDF, PNG)", type=["pdf", "png", "jpg"])
         
         if st.form_submit_with_checkbox("Log Expense & Receipt") and vendor:
@@ -98,16 +98,16 @@ if app_mode == "📊 Dashboard & Tax Engine":
     st.subheader("🏛️ Core Accounting & Tax Balancing Engine")
     kpi1, kpi2, kpi3, kpi4 = st.columns(4)
     
-    kpi1.metric("Gross Tax Owed (Sales)", f"${gross_tax_liability:,.2f}", help="Total tax applied to your client invoices.")
-    kpi2.metric("Total Tax Offsets (Expenses)", f"${total_tax_offsets:,.2f}", delta=f"-${total_tax_offsets:,.2f}", delta_color="inverse", help="Tax you have already paid on business operations. This directly subtracts from what you owe.")
+    kpi1.metric("Gross Tax Owed (Sales)", f"Rp.{gross_tax_liability:,.2f}", help="Total tax applied to your client invoices.")
+    kpi2.metric("Total Tax Offsets (Expenses)", f"Rp.{total_tax_offsets:,.2f}", delta=f"-Rp.{total_tax_offsets:,.2f}", delta_color="inverse", help="Tax you have already paid on business operations. This directly subtracts from what you owe.")
     
     # Dynamic styling depending on whether you owe money or get a refund
     if net_tax_owed >= 0:
-        kpi3.metric("Net Tax Liability Owed", f"${net_tax_owed:,.2f}", delta="Payable to Authority")
+        kpi3.metric("Net Tax Liability Owed", f"Rp.{net_tax_owed:,.2f}", delta="Payable to Authority")
     else:
-        kpi3.metric("Net Tax Refund Due", f"${abs(net_tax_owed):,.2f}", delta="Tax Credit Carry-forward", delta_color="normal")
+        kpi3.metric("Net Tax Refund Due", f"Rp.{abs(net_tax_owed):,.2f}", delta="Tax Credit Carry-forward", delta_color="normal")
         
-    kpi4.metric("Total Operating Expenses", f"${total_expenses_value:,.2f}")
+    kpi4.metric("Total Operating Expenses", f"Rp.{total_expenses_value:,.2f}")
     
     st.markdown("---")
     
@@ -140,7 +140,7 @@ if app_mode == "📊 Dashboard & Tax Engine":
     tab1, tab2 = st.tabs(["📂 Sales & Invoices Ledger", "🧾 Operational Expenses & Receipts"])
     
     with tab1:
-        st.dataframe(inv_df.style.format({'Amount': '${:,.2f}', 'Tax_Collected': '${:,.2f}', 'Tax_Rate_%': '{:.0f}%'}), use_container_width=True)
+        st.dataframe(inv_df.style.format({'Amount': 'Rp.{:,.2f}', 'Tax_Collected': 'Rp.{:,.2f}', 'Tax_Rate_%': '{:.0f}%'}), use_container_width=True)
         
     with tab2:
         # Highlight lines missing receipts in soft red for tax audit safety
