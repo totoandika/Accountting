@@ -189,7 +189,7 @@ with tab3:
         insights.append("✅ **Kesehatan Keuangan Baik:** Rasio pengeluaran Anda berada di bawah batas aman (50%). Manajemen biaya operasional dari Januari hingga Juni berjalan sangat efisien.")
         
    if total_pending_tax > 0:
-    insights.append(f"⏳ **Optimasi Piutang:** Terdapat potensi pajak dan dana terikat pada invoice *Unpaid* sebesar **Rp {total_pending_tax:,.0f}**. AI menyarankan untuk segera mengirimkan pengingat invoice otomatis kepada klien yang masuk dalam daftar umur piutang > 30 hari guna mengamankan likuiditas sebelum akhir tahun pajak.".replace(",", ".")
+    insights.append(f"⏳ **Optimasi Piutang:** Terdapat potensi pajak dan dana terikat pada invoice *Unpaid* sebesar **Rp {total_pending_tax:,.0f}**. AI menyarankan untuk segera mengirimkan pengingat invoice otomatis kepada klien yang masuk dalam daftar umur piutang > 30 hari guna mengamankan likuiditas sebelum akhir tahun pajak.").replace(",", ".")
                     
     if total_tax_offsets > 0:
         insights.append(f"🛡️ **Manfaat Pajak Terdeteksi:** Anda berhasil mengklaim Tax Offset sebesar **Rp {total_tax_offsets:,.0f}** dari pengeluaran operasional Anda. Ini membantu menekan total kewajiban pajak bersih Anda secara legal.").replace(",", ".")
