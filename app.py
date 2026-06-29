@@ -79,7 +79,8 @@ if app_mode == "➕ Input Invoice Baru":
         tax_rate = st.slider("Tarif Pajak (%)", 0, 20, 11)
         due_d = st.date_input("Tanggal Jatuh Tempo", value=today)
         status = st.selectbox("Status Pembayaran", ["Unpaid", "Paid"])
-        if st.form_submit_with_checkbox("Simpan Invoice") and client:
+        submit_inv = st.form_submit_button("Simpan Invoice")
+        if submit_inv and client:
             new_inv = {'Invoice_ID': f"INV-00{len(inv_df)+1}", 'Client': client, 'Due_Date': pd.to_datetime(due_d), 'Amount': amount, 'Tax_Rate_%': tax_rate, 'Status': status}
             st.session_state.invoices = pd.concat([st.session_state.invoices, pd.DataFrame([new_inv])], ignore_index=True)
             st.success("Invoice Penjualan Berhasil Tersimpan!")
@@ -93,11 +94,12 @@ elif app_mode == "🧾 Input Pengeluaran & Nota":
         exp_amount = st.number_input("Nominal Dasar Pengeluaran (Rp)", min_value=0.0, step=500000.0)
         tax_paid = st.number_input("Pajak Masukan Masuk Masukan (Rp)", min_value=0.0, step=50000.0)
         uploaded_file = st.file_uploader("Unggah Bukti Nota/Kuitansi (PDF, PNG, JPG)", type=["pdf", "png", "jpg"])
-        if st.form_submit_with_checkbox("Simpan Pengeluaran") and vendor:
+        submit_exp = st.form_submit_button("Simpan Pengeluaran")
+        if submit_exp and vendor:
             receipt_status = "Uploaded" if uploaded_file is not None else "Missing"
             new_exp = {'Expense_ID': f"EXP-00{len(exp_df)+1}", 'Vendor': vendor, 'Category': category, 'Date': today, 'Amount': exp_amount, 'Tax_Paid': tax_paid, 'Receipt': receipt_status}
             st.session_state.expenses = pd.concat([st.session_state.expenses, pd.DataFrame([new_exp])], ignore_index=True)
-            st.success("Pengleluaran Berhasil Dipetakan Sebagai Pengurang Pajak!")
+            st.success("Pengeluaran Berhasil Dipetakan Sebagai Pengurang Pajak!")
             st.rerun()
 
 # --- TAMPILAN DASHBOARD UTAMA ---
